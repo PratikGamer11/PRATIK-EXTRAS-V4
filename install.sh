@@ -193,9 +193,7 @@ while true; do
                 show_panel_menu
                 read subchoice
                 case $subchoice in
-                    B|b)
                         break
-                    X|x)
                         echo -e "${GREEN}Thanks for using PRATIK EXTRAS!${NC}"
                         exit 0
                     ;;
