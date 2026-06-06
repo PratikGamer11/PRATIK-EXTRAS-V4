@@ -12,27 +12,31 @@ ORANGE='\033[0;33m'
 LIME='\033[1;32m'
 CYAN='\033[0;36m'
 PURPLE='\033[0;35m'
-BOLD='\033[1m'
 NC='\033[0m'
 
 # Configuration
-REPO_OWNER="PratikGamer11"
-REPO_NAME="PRATIK-EXTRAS-V4"
-REPO_URL="https://raw.githubusercontent.com/$REPO_OWNER/$REPO_NAME/main"
 INSTALL_DIR="$HOME/PRATIK-EXTRAS-V4"
 
 # Progress bar function
 show_progress() {
-    local percent=$1
-    local width=30
-    local filled=$((percent * width / 100))
-    local empty=$((width - filled))
+    percent=$1
+    width=30
+    filled=$((percent * width / 100))
+    empty=$((width - filled))
     
-    local bar=""
-    for ((i=0; i<filled; i++)); do bar+="█"; done
-    for ((i=0; i<empty; i++)); do bar+="░"; done
+    bar=""
+    i=0
+    while [ $i -lt $filled ]; do
+        bar="${bar}█"
+        i=$((i + 1))
+    done
     
-    local color=$NC
+    i=0
+    while [ $i -lt $empty ]; do
+        bar="${bar}░"
+        i=$((i + 1))
+    done
+    
     if [ $percent -le 30 ]; then
         color=$YELLOW
     elif [ $percent -le 60 ]; then
@@ -47,7 +51,7 @@ show_progress() {
 # Big ASCII text function
 big_text() {
     echo ""
-    echo -e "${PURPLE}${BOLD}"
+    echo -e "${PURPLE}"
     echo "  ██████╗██╗     ██╗    ██████╗  ██████╗ ██████╗ ████████╗███████╗██████╗ "
     echo " ██╔════╝██║     ██║    ██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝██╔══██╗"
     echo " ██║     ██║     ██║    ██║  ██║██║   ██║██████╔╝   ██║   █████╗  ██████╔╝"
@@ -62,38 +66,39 @@ big_text() {
 # ============================================
 install_unofficial_panel() {
     clear
-    echo -e "${RED}========================================${NC}"
-    echo -e "${RED}    🚀 UNOFFICIAL PANEL INSTALLING    ${NC}"
-    echo -e "${RED}========================================${NC}"
+    echo -e "${RED}========================================"
+    echo -e "${RED}    🚀 UNOFFICIAL PANEL INSTALLING    "
+    echo -e "${RED}========================================"
     echo ""
-    echo -e "${YELLOW}📥 Updating & Upgrading System...${NC}"
+    echo -e "${YELLOW}📥 Updating & Upgrading System..."
     
     apt update -y
     apt upgrade -y
     
-    echo -e "${YELLOW}📦 Installing Node.js & Screen...${NC}"
+    echo -e "${YELLOW}📦 Installing Node.js & Screen..."
     apt install nodejs -y
     apt install screen -y
     
-    echo -e "${YELLOW}📂 Cloning Crispy Adventure...${NC}"
+    echo -e "${YELLOW}📂 Cloning Crispy Adventure..."
     cd "$HOME"
     git clone https://github.com/PratikGamer11/crispy-adventure
     
-    echo -e "${YELLOW}📦 Installing Express...${NC}"
+    echo -e "${YELLOW}📦 Installing Express..."
     cd "$HOME/crispy-adventure"
     npm install express
     
     apt update -y
     clear
     
-    echo -e "${GREEN}========================================${NC}"
-    echo -e "${GREEN}  ✅ UNOFFICIAL PANEL INSTALLED!     ${NC}"
-    echo -e "${GREEN}========================================${NC}"
-    echo -e "${CYAN}📂 Project Location: $HOME/crispy-adventure${NC}"
-    echo -e "${CYAN}🚀 Run with: cd crispy-adventure && node .${NC}"
+    echo -e "${GREEN}========================================"
+    echo -e "${GREEN}  ✅ UNOFFICIAL PANEL INSTALLED!     "
+    echo -e "${GREEN}========================================"
+    echo -e "${CYAN}📂 Location: $HOME/crispy-adventure"
+    echo -e "${CYAN}Run: cd crispy-adventure && node ."
     echo ""
     
-    read -p "Press Enter to continue..."
+    echo -n "Press Enter to continue..."
+    read dummy
 }
 
 # ============================================
@@ -101,15 +106,15 @@ install_unofficial_panel() {
 # ============================================
 show_menu() {
     clear
-    echo -e "${RED}========================================${NC}"
-    echo -e "${RED}         🔴 PRATIK EXTRAS MENU         ${NC}"
-    echo -e "${RED}========================================${NC}"
+    echo -e "${RED}========================================"
+    echo -e "${RED}         🔴 PRATIK EXTRAS MENU         "
+    echo -e "${RED}========================================"
     echo ""
-    echo -e "${CYAN}[1]${NC} Panel"
-    echo -e "${RED}[A]${NC} Unofficial Panel"
-    echo -e "${CYAN}[X]${NC} Exit"
+    echo -e "${CYAN}[1] Panel"
+    echo -e "${RED}[A] Unofficial Panel"
+    echo -e "${CYAN}[X] Exit"
     echo ""
-    echo -e "${RED}========================================${NC}"
+    echo -e "${RED}========================================"
     echo -n "Select Option: "
 }
 
@@ -118,93 +123,54 @@ show_menu() {
 # ============================================
 show_panel_menu() {
     clear
-    echo -e "${RED}========================================${NC}"
-    echo -e "${RED}           🔴 PANEL MENU             ${NC}"
-    echo -e "${RED}========================================${NC}"
+    echo -e "${RED}========================================"
+    echo -e "${RED}           🔴 PANEL MENU             "
+    echo -e "${RED}========================================"
     echo ""
-    echo -e "${CYAN}[B]${NC} Back to Main Menu"
-    echo -e "${CYAN}[X]${NC} Exit"
+    echo -e "${CYAN}[B] Back to Main Menu"
+    echo -e "${CYAN}[X] Exit"
     echo ""
-    echo -e "${RED}========================================${NC}"
+    echo -e "${RED}========================================"
     echo -n "Select Option: "
 }
 
 # ============================================
-# MENU HANDLER FUNCTION
+# MAIN SCRIPT START
 # ============================================
-handle_menu() {
-    local choice="$1"
-    
-    case "$choice" in
-        1)
-            # Panel Submenu
-            local panel_loop=1
-            while [ $panel_loop -eq 1 ]; do
-                show_panel_menu
-                read subchoice
-                case "$subchoice" in
-                    B|b)
-                        panel_loop=0
-                        ;;
-                    X|x)
-                        echo -e "${GREEN}Thanks for using PRATIK EXTRAS!${NC}"
-                        exit 0
-                        ;;
-                    *)
-                        echo -e "${RED}Invalid option! Try again.${NC}"
-                        sleep 1
-                        ;;
-                esac
-            done
-            ;;
-        A|a)
-            # Install Unofficial Panel
-            install_unofficial_panel
-            ;;
-        X|x)
-            echo -e "${GREEN}Thanks for using PRATIK EXTRAS!${NC}"
-            exit 0
-            ;;
-        *)
-            echo -e "${RED}Invalid option! Try again.${NC}"
-            sleep 1
-            ;;
-    esac
-}
-
-# ========== MAIN SCRIPT ==========
 
 clear
-echo -e "${CYAN}========================================${NC}"
-echo -e "${CYAN}       🚀 PRATIK EXTRAS V4             ${NC}"
-echo -e "${CYAN}       INSTALLATION STARTED           ${NC}"
-echo -e "${CYAN}========================================${NC}"
+echo -e "${CYAN}========================================"
+echo -e "${CYAN}       🚀 PRATIK EXTRAS V4             "
+echo -e "${CYAN}       INSTALLATION STARTED           "
+echo -e "${CYAN}========================================"
 echo ""
 
-# Stage 1: Initializing (RED)
-echo -e "${RED}🔧 Initializing...${NC}"
+# Stage 1: Initializing
+echo -e "${RED}🔧 Initializing..."
 sleep 1
 
 # Create directory
 mkdir -p "$INSTALL_DIR"
-echo -e "${CYAN}📁 Created: $INSTALL_DIR${NC}"
+echo -e "${CYAN}📁 Created: $INSTALL_DIR"
 sleep 0.5
 
-# Stage 2: Progressing with colored progress bar
+# Stage 2: Progressing
 echo ""
-echo -e "${RED}📥 Progressing:${NC}"
+echo -e "${RED}📥 Progressing:"
 echo ""
 
-# Simulate download progress (0-100%)
-for percent in $(seq 0 5 100); do
+# Simulate download progress
+percent=0
+while [ $percent -lt 100 ]; do
     show_progress $percent
+    percent=$((percent + 5))
     sleep 0.05
 done
 
 echo ""
 echo ""
 
-echo -e "${GREEN}✅ Files downloaded successfully!${NC}"
+echo -e "${GREEN}✅ Files downloaded successfully!"
 sleep 1
 
 # CLEAR SCREEN AFTER LOADING
@@ -214,20 +180,49 @@ clear
 big_text
 
 echo ""
-echo -e "${GREEN}✅ Done! Installation Complete!${NC}"
-echo -e "${GREEN}   Thanks for installing PRATIK EXTRAS V4!${NC}"
+echo -e "${GREEN}✅ Done! Installation Complete!"
+echo -e "${GREEN}   Thanks for installing PRATIK EXTRAS V4!"
 echo ""
-echo -e "${CYAN}========================================${NC}"
-echo -e "${GREEN}📂 Location: $INSTALL_DIR${NC}"
-echo -e "${CYAN}========================================${NC}"
+echo -e "${CYAN}========================================"
+echo -e "${GREEN}📂 Location: $INSTALL_DIR"
+echo -e "${CYAN}========================================"
 echo ""
 
 # ============================================
-# INTERACTIVE MENU LOOP
+# INTERACTIVE MENU
 # ============================================
-main_loop=1
-while [ $main_loop -eq 1 ]; do
+running=true
+while [ "$running" = "true" ]; do
     show_menu
     read choice
-    handle_menu "$choice"
+    
+    if [ "$choice" = "1" ]; then
+        # Panel Submenu
+        panel_running=true
+        while [ "$panel_running" = "true" ]; do
+            show_panel_menu
+            read subchoice
+            
+            if [ "$subchoice" = "B" ] || [ "$subchoice" = "b" ]; then
+                panel_running=false
+            elif [ "$subchoice" = "X" ] || [ "$subchoice" = "x" ]; then
+                echo -e "${GREEN}Thanks for using PRATIK EXTRAS!"
+                exit 0
+            else
+                echo -e "${RED}Invalid option! Try again."
+                sleep 1
+            fi
+        done
+        
+    elif [ "$choice" = "A" ] || [ "$choice" = "a" ]; then
+        install_unofficial_panel
+        
+    elif [ "$choice" = "X" ] || [ "$choice" = "x" ]; then
+        echo -e "${GREEN}Thanks for using PRATIK EXTRAS!"
+        exit 0
+        
+    else
+        echo -e "${RED}Invalid option! Try again."
+        sleep 1
+    fi
 done
