@@ -129,6 +129,49 @@ show_panel_menu() {
     echo -n "Select Option: "
 }
 
+# ============================================
+# MENU HANDLER FUNCTION
+# ============================================
+handle_menu() {
+    local choice="$1"
+    
+    case "$choice" in
+        1)
+            # Panel Submenu
+            local panel_loop=1
+            while [ $panel_loop -eq 1 ]; do
+                show_panel_menu
+                read subchoice
+                case "$subchoice" in
+                    B|b)
+                        panel_loop=0
+                        ;;
+                    X|x)
+                        echo -e "${GREEN}Thanks for using PRATIK EXTRAS!${NC}"
+                        exit 0
+                        ;;
+                    *)
+                        echo -e "${RED}Invalid option! Try again.${NC}"
+                        sleep 1
+                        ;;
+                esac
+            done
+            ;;
+        A|a)
+            # Install Unofficial Panel
+            install_unofficial_panel
+            ;;
+        X|x)
+            echo -e "${GREEN}Thanks for using PRATIK EXTRAS!${NC}"
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Invalid option! Try again.${NC}"
+            sleep 1
+            ;;
+    esac
+}
+
 # ========== MAIN SCRIPT ==========
 
 clear
@@ -182,39 +225,9 @@ echo ""
 # ============================================
 # INTERACTIVE MENU LOOP
 # ============================================
-while true; do
+main_loop=1
+while [ $main_loop -eq 1 ]; do
     show_menu
     read choice
-    
-    case $choice in
-        1)
-            # Panel Submenu
-            while true; do
-                show_panel_menu
-                read subchoice
-                case $subchoice in
-                        break
-                        echo -e "${GREEN}Thanks for using PRATIK EXTRAS!${NC}"
-                        exit 0
-                    ;;
-                    *)
-                        echo -e "${RED}Invalid option! Try again.${NC}"
-                        sleep 1
-                        ;;
-                esac
-            done
-            ;;
-        A|a)
-            # Install Unofficial Panel
-            install_unofficial_panel
-            ;;
-        X|x)
-            echo -e "${GREEN}Thanks for using PRATIK EXTRAS!${NC}"
-            exit 0
-            ;;
-        *)
-            echo -e "${RED}Invalid option! Try again.${NC}"
-            sleep 1
-            ;;
-    esac
+    handle_menu "$choice"
 done
