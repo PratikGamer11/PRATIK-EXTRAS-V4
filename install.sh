@@ -84,6 +84,7 @@ echo ""
 for percent in $(seq 0 5 100); do
     show_progress $percent
     sleep 0.05
+    clear
 done
 
 echo ""
